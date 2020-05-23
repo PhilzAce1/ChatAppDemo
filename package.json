@@ -12,6 +12,7 @@
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.1",
+    "react-scroll": "^1.7.16",
     "uuid": "^8.0.0"
   },
   "scripts": {

@@ -6,10 +6,6 @@ import {
   getUser,
 } from '../others/GraphQl';
 import { API, graphqlOperation } from 'aws-amplify';
-// import {
-
-// } from '../../graphql/mutations';
-
 export const initialState = {
   username: '',
   convoId: '',
@@ -23,7 +19,7 @@ export const chatReducer = (state = initialState, action) => {
         username: action.username,
       };
     case 'SET_CONVOID':
-      console.log(action.convoId);
+      // console.log(action.convoId);
 
       return {
         ...state,
@@ -34,12 +30,6 @@ export const chatReducer = (state = initialState, action) => {
         ...state,
         convoLinkId: action.convoLinkId,
       };
-
-    // case 'ADD_MESSAGE':
-    //   return {
-    //     ...state,
-    //     messages: [...state.messages, action.messages],
-    //   };
     default:
       return state;
   }
@@ -51,7 +41,6 @@ export default function SearchBar(props) {
   const [modal, setModal] = useState(false);
   async function createConversation(e) {
     const data = e.currentTarget.id.split(',');
-    // return console.log(data[0]);
     try {
       const otherUser = data[0];
       // const username = props.props.match.params.userId;
@@ -63,7 +52,35 @@ export default function SearchBar(props) {
           },
         },
       } = await API.graphql(graphqlOperation(getUser, { id: userId }));
-      // return console.log(w);
+      const {
+        data: {
+          getUser: {
+            conversations: { items: otherUserConversations },
+          },
+        },
+      } = await API.graphql(graphqlOperation(getUser, { id: data[1] }));
+
+      for (let x = 0; x < conversations.length; x++) {
+        for (let y = 0; y < otherUserConversations.length; y++) {
+          if (
+            conversations[x].convoLinkConversationId ===
+            otherUserConversations[y].convoLinkConversationId
+          ) {
+            console.clear();
+
+            console.log(
+              conversations[x].convoLinkConversationId,
+              otherUserConversations[y].convoLinkConversationId
+            );
+            console.log('there is something there');
+            return props.props.history.push(
+              `/chat/${userId}/${otherUserConversations[y].convoLinkConversationId}`
+            );
+            break;
+          }
+        }
+      }
+
       const members = [`${username}`, otherUser].sort();
       const conversationName = members.join(' and ');
       const convo = { name: conversationName, members };
@@ -79,6 +96,7 @@ export default function SearchBar(props) {
       dispatch({ type: 'SET_USERNAME', username: otherUser });
 
       const relation1 = { convoLinkUserId: userId, convoLinkConversationId };
+      props.fn(userId);
       const relation2 = {
         convoLinkUserId: data[1],
         convoLinkConversationId,
@@ -93,7 +111,6 @@ export default function SearchBar(props) {
         `/chat/${userId}/${convoLinkConversationId}`
       );
     } catch (err) {
-      // if (err.errors[0].message) return console.log(err.errors[0].message);
       console.log(err);
     }
   }
@@ -147,7 +164,6 @@ export default function SearchBar(props) {
       >
         {users.map((x, i) => {
           if (!users) return <div>NO user with that name</div>;
-          console.log(x.id);
           return (
             <div
               style={{

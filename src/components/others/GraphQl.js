@@ -53,34 +53,34 @@ export const createMessage = /* GraphQL */ `
   ) {
     createMessage(input: $input, condition: $condition) {
       id
-      author {
-        id
-        username
-        conversations {
-          nextToken
-        }
-        messages {
-          nextToken
-        }
-        createdAt
-        updatedAt
-      }
+      # author {
+      #   id
+      #   username
+      #   conversations {
+      #     nextToken
+      #   }
+      #   messages {
+      #     nextToken
+      #   }
+      #   createdAt
+      #   updatedAt
+      # }
       authorId
       content
-      conversation {
-        id
-        messages {
-          nextToken
-        }
-        associated {
-          nextToken
-        }
-        name
-        members
-        createdAt
-        updatedAt
-      }
-      messageConversationId
+      # conversation {
+      #   id
+      #   messages {
+      #     nextToken
+      #   }
+      #   associated {
+      #     nextToken
+      #   }
+      #   name
+      #   members
+      #   createdAt
+      #   updatedAt
+      # }
+      # messageConversationId
       createdAt
       updatedAt
     }
@@ -159,6 +159,17 @@ export const listUsers = /* GraphQL */ `
         id
         username
         conversations {
+          items {
+            conversation {
+              members
+              id
+            }
+            id
+            convoLinkUserId
+            convoLinkConversationId
+            createdAt
+            updatedAt
+          }
           nextToken
         }
         createdAt
@@ -232,6 +243,43 @@ export const onCreateMessage = /* GraphQL */ `
         updatedAt
       }
       messageConversationId
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
+export const onCreateConvoLink = /* GraphQL */ `
+  subscription OnCreateConvoLink($convoLinkUserId: ID!) {
+    onCreateConvoLink(convoLinkUserId: $convoLinkUserId) {
+      id
+      user {
+        id
+        username
+        conversations {
+          nextToken
+        }
+        # messages {
+        #   nextToken
+        # }
+        createdAt
+        updatedAt
+      }
+      convoLinkUserId
+      conversation {
+        id
+        # messages {
+        #   nextToken
+        # }
+        # associated {
+        #   nextToken
+        # }
+        name
+        members
+        createdAt
+        updatedAt
+      }
+      convoLinkConversationId
       createdAt
       updatedAt
     }

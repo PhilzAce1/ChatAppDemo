@@ -12,8 +12,6 @@ export default function Signin(props) {
   const createUser = async (e) => {
     e.preventDefault();
     if (val === '') return;
-    console.log('you are clicking me ...but i am not working ');
-
     try {
       const newUser = {
         username: val.toLowerCase(),
@@ -32,7 +30,6 @@ export default function Signin(props) {
       //   if (newUser.username === items[0].username)
       //     return props.history.push(`/chat/${items[0].id}`);
       // }
-      console.log(items);
       // const userExist = await Api.graphql(graphqlOperation())
       const {
         data: { createUser: user },
